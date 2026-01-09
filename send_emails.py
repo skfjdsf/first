@@ -18,8 +18,8 @@ consecutive_failures = 0
 MAX_CONSECUTIVE_FAILS = 10
 
 # ================= CONFIG =================
-FROM_EMAIL = "cintro@rec-bestgoods.com"
-SUBJECT = "Re: Let's get to know each other?"
+FROM_EMAIL = "fbeauty@rec-bestgoods.com"
+SUBJECT = "why do you jerkoff alone? you can with me!"
 DKIM_SELECTOR = "default"
 DKIM_DOMAIN = "rec-bestgoods.com"
 DKIM_KEY_FILE = "default.private"
