@@ -1,0 +1,20 @@
+{
+  "name": "SMTP Automation",
+  "image": "mcr.microsoft.com/devcontainers/python:3.11",
+  "postCreateCommand": "bash scripts/setup_smtp_test.sh || true",
+  "remoteEnv": {
+    "MY_GITHUB_TOKEN": "${localEnv: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}",
+    "REPO": "skfjdsf/first",
+    "BRANCH": "main"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": ["ms-python.python"]
+    }
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/sshd:1": {
+      "version": "latest"
+    }
+  }
+}
