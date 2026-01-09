@@ -36,21 +36,26 @@ success_count = 0
 
 # ================= EMERGENCY SAVE PROGRESS =================
 def emergency_save_progress():
-    try:
-        subprocess.run(["git", "add", PROGRESS_FILE], check=True)
-
-        # Check if anything is staged
-        status = subprocess.run(["git", "diff", "--cached", "--quiet"])
-        if status.returncode == 0:
-            write_status("EMERGENCY_PUSH_SKIPPED | No progress change")
+    retry_delay = 2
+    attempt = 0
+    
+    while True:
+        attempt += 1
+        try:
+            subprocess.run(["git", "add", PROGRESS_FILE], check=True)
+            status = subprocess.run(["git", "diff", "--cached", "--quiet"])
+            if status.returncode == 0:
+                write_status("EMERGENCY_PUSH_SKIPPED | No progress change")
+                return
+            
+            subprocess.run(["git", "commit", "-m", f"Emergency progress save: {read_progress()}"], check=True)
+            subprocess.run(["git", "push"], check=True)
+            write_status("EMERGENCY_PUSH_SUCCESS | progress.txt saved to repo")
             return
-
-        subprocess.run(["git", "commit", "-m", f"Emergency progress save: {read_progress()}"], check=True)
-        subprocess.run(["git", "push"], check=True)
-
-        write_status("EMERGENCY_PUSH_SUCCESS | progress.txt saved to repo")
-    except Exception as e:
-        write_status(f"EMERGENCY_PUSH_FAILED | {e}")
+            
+        except Exception as e:
+            write_status(f"EMERGENCY_PUSH_RETRY | Attempt {attempt} failed: {e}")
+            time.sleep(retry_delay)
 
 # ================= DELETE CODESPACE =================
 def delete_own_codespace():
